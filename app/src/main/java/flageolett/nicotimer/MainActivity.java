@@ -1,41 +1,55 @@
 package flageolett.nicotimer;
 
-import android.app.ActivityManager;
-import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
-
-import java.util.stream.Collectors;
 
 public class MainActivity extends AppCompatActivity
 {
+    private EditText target;
+    private TextView status;
+
+    private void updateStatus()
+    {
+        ApplicationState application = (ApplicationState)getApplication();
+        String statusText = application.getStatusText();
+
+        status.setText(statusText);
+    }
+
+    private void updateTarget()
+    {
+        String currentTarget = ApplicationState.get().getTarget();
+        target.setText(currentTarget);
+    }
+
+    private void storeTarget()
+    {
+        String currentTarget = target.getText().toString();
+        ApplicationState.get().setTarget(currentTarget);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        target = (EditText)findViewById(R.id.editText_target);
+        status = (TextView)findViewById(R.id.textView_status_text);
+
         updateStatus();
+        updateTarget();
     }
 
-    private void updateStatus()
+    @Override
+    protected void onPause()
     {
-        ActivityManager manager = (ActivityManager)getSystemService(Context.ACTIVITY_SERVICE);
-        final String className = TimerService.class.getName();
-
-        Boolean isRunning = manager
-            .getRunningServices(Integer.MAX_VALUE)
-            .stream()
-            .filter(s -> s.service.getClassName().equals(className))
-            .collect(Collectors.toList())
-            .size() > 0;
-
-        String statusText = isRunning ? "Running" : "Stopped";
-
-        TextView textView = (TextView)findViewById(R.id.textView_status_text);
-        textView.setText(statusText);
+        super.onPause();
+        storeTarget();
     }
 
     public void startTimer(View view)
