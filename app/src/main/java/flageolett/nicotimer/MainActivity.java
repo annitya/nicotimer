@@ -9,8 +9,10 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity
 {
-    private EditText target;
     private TextView status;
+    private EditText target;
+    private EditText unit;
+    private EditText accepted;
 
     private void updateStatus()
     {
@@ -20,16 +22,9 @@ public class MainActivity extends AppCompatActivity
         status.setText(statusText);
     }
 
-    private void updateTarget()
+    private State state()
     {
-        String currentTarget = ApplicationState.get().getTarget();
-        target.setText(currentTarget);
-    }
-
-    private void storeTarget()
-    {
-        String currentTarget = target.getText().toString();
-        ApplicationState.get().setTarget(currentTarget);
+        return ApplicationState.get();
     }
 
     @Override
@@ -38,18 +33,25 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        target = (EditText)findViewById(R.id.editText_target);
         status = (TextView)findViewById(R.id.textView_status_text);
+        target = (EditText)findViewById(R.id.editText_target);
+        unit = (EditText)findViewById(R.id.editText_unit);
+        accepted = (EditText)findViewById(R.id.editText_accepted);
 
         updateStatus();
-        updateTarget();
+        target.setText(state().getTarget());
+        unit.setText(state().getUnit());
+        accepted.setText(state().getAccepted());
     }
 
     @Override
     protected void onPause()
     {
         super.onPause();
-        storeTarget();
+
+        state().setTarget(target.getText().toString());
+        state().setUnit(unit.getText().toString());
+        state().setAccepted(accepted.getText().toString());
     }
 
     public void startTimer(View view)

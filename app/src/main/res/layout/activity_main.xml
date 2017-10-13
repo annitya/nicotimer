@@ -30,12 +30,35 @@
         android:id="@+id/textView" tools:layout_constraintTop_creator="1"
         app:layout_constraintTop_toBottomOf="@+id/textView_status" tools:layout_constraintLeft_creator="1"
         app:layout_constraintLeft_toLeftOf="@+id/textView_status" android:layout_marginTop="10dp"
-    />
+        android:layout_marginLeft="0dp" />
     <EditText android:textSize="15sp" android:layout_width="43dp" android:layout_height="40dp" android:inputType="text"
         android:text="@string/main_ti_target" android:ems="10" android:id="@+id/editText_target" tools:layout_constraintTop_creator="1"
         app:layout_constraintTop_toBottomOf="@+id/textView_status_text" tools:layout_constraintLeft_creator="1"
-        app:layout_constraintLeft_toLeftOf="@+id/textView_status_text"
+        app:layout_constraintLeft_toLeftOf="@+id/textView_status_text" android:layout_marginLeft="18dp"
+        android:layout_marginTop="0dp" />
+    <TextView android:text="@string/main_t_unit" android:layout_width="wrap_content"
+        android:layout_height="wrap_content" android:id="@+id/textView_unit" tools:layout_constraintTop_creator="1"
+        app:layout_constraintTop_toBottomOf="@+id/textView_status" tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toLeftOf="@+id/textView_status" android:layout_marginTop="40dp"
+        android:layout_marginLeft="0dp"
     />
-
+    <EditText android:textSize="15sp" android:layout_width="43dp" android:layout_height="40dp" android:inputType="text"
+        android:text="@string/main_ti_unit" android:ems="10" android:id="@+id/editText_unit"
+        tools:layout_constraintTop_creator="1" app:layout_constraintTop_toBottomOf="@+id/textView_status_text"
+        tools:layout_constraintLeft_creator="1" app:layout_constraintLeft_toLeftOf="@+id/textView_status_text"
+        android:layout_marginLeft="18dp" android:layout_marginTop="27dp"
+    />
+    <TextView android:text="@string/main_t_accepted" android:layout_width="wrap_content"
+        android:layout_height="wrap_content" android:id="@+id/textView_accepted" tools:layout_constraintTop_creator="1"
+        app:layout_constraintTop_toBottomOf="@+id/textView_status" tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toLeftOf="@+id/textView_status" android:layout_marginTop="67dp"
+        android:layout_marginLeft="0dp"
+    />
+    <EditText android:textSize="15sp" android:layout_width="43dp" android:layout_height="40dp" android:inputType="text"
+        android:text="@string/main_ti_accepted" android:ems="10" android:id="@+id/editText_accepted"
+        tools:layout_constraintTop_creator="1" app:layout_constraintTop_toBottomOf="@+id/textView_status_text"
+        tools:layout_constraintLeft_creator="1" app:layout_constraintLeft_toLeftOf="@+id/textView_status_text"
+        android:layout_marginLeft="18dp" android:layout_marginTop="58dp"
+    />
 
 </android.support.constraint.ConstraintLayout>

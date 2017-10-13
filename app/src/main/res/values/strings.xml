@@ -3,6 +3,13 @@
     <string name="main_t_status">Status:</string>
     <string name="main_button_start">Start</string>
     <string name="main_button_stop">Stop</string>
-    <string name="main_t_target" >Target:</string>
+    <string name="main_t_target">Target:</string>
     <string name="main_ti_target">46</string>
+    <string name="main_t_unit">Unit:</string>
+    <string name="main_ti_unit">2</string>
+    <string name="main_t_accepted">Accepted:</string>
+    <string name="main_ti_accepted">0</string>
+    <string name="nico_notification_title_template">It\'s time!</string>
+    <string name="accept">Accept</string>
+    <string name="action_reject">Reject</string>
 </resources>

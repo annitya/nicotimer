@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
 import java.util.Timer;
+import java.util.TimerTask;
 
 public class TimerService extends Service
 {
@@ -18,7 +19,6 @@ public class TimerService extends Service
     @Override
     public IBinder onBind(Intent intent)
     {
-        // TODO: Return the communication channel to the service.
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
@@ -26,7 +26,14 @@ public class TimerService extends Service
     public int onStartCommand(Intent intent, int flags, int startId)
     {
         Log.d("timer", "Starting");
-        timer.schedule(new Task(), 3000, 3000);
+        timer.schedule(new TimerTask()
+        {
+            @Override
+            public void run()
+            {
+                NicoNotification.notify(getApplicationContext());
+            }
+        }, 0, 10000);
 
         return super.onStartCommand(intent, flags, startId);
     }
