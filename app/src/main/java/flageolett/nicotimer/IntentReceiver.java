@@ -3,6 +3,7 @@ package flageolett.nicotimer;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 
 public class IntentReceiver extends BroadcastReceiver
 {
@@ -16,10 +17,14 @@ public class IntentReceiver extends BroadcastReceiver
             return;
         }
 
-        Integer unit = Integer.parseInt(ApplicationState.get().getUnit());
-        Integer currentAccepted = Integer.parseInt(ApplicationState.get().getAccepted());
+        SharedPreferences preferences = context.getSharedPreferences(State.PREFERENCES, Context.MODE_PRIVATE);
 
+        Integer unit = Integer.parseInt(preferences.getString("unit", "2"));
+        Integer currentAccepted = Integer.parseInt(preferences.getString("accepted", "0"));
         Integer newValue = unit + currentAccepted;
-        ApplicationState.get().setAccepted(newValue.toString());
+
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("accepted", newValue.toString());
+        editor.apply();
     }
 }

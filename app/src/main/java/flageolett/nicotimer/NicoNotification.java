@@ -32,6 +32,7 @@ class NicoNotification
             .setTicker(nowOrLater)
             .addAction(R.drawable.ic_action_stat_share, res.getString(R.string.accept), pendingAcceptIntent)
             .addAction(R.drawable.ic_action_stat_reply, res.getString(R.string.action_reject), pendingRejectIntent)
+            .setDeleteIntent(pendingAcceptIntent)
             .setAutoCancel(true);
 
         notify(context, builder.build());

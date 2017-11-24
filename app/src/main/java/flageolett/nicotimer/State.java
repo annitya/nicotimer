@@ -1,45 +1,102 @@
 package flageolett.nicotimer;
 
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.widget.EditText;
+import android.widget.TextView;
 
-class State
+import java.util.stream.Collectors;
+
+class State implements SharedPreferences.OnSharedPreferenceChangeListener
 {
+    public static final String PREFERENCES = "nicotimer";
     private SharedPreferences preferences;
+    private ActivityManager manager;
 
-    State(SharedPreferences preferences)
+    private EditText target;
+    private EditText unit;
+    private EditText accepted;
+    private TextView status;
+
+    State(MainActivity mainActivity)
     {
-        this.preferences = preferences;
+        preferences = mainActivity.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
+        manager = (ActivityManager)mainActivity.getSystemService(Context.ACTIVITY_SERVICE);
+
+        status = (TextView)mainActivity.findViewById(R.id.textView_status_text);
+        target = (EditText)mainActivity.findViewById(R.id.editText_target);
+        unit = (EditText)mainActivity.findViewById(R.id.editText_unit);
+        accepted = (EditText)mainActivity.findViewById(R.id.editText_accepted);
+
+        preferences.registerOnSharedPreferenceChangeListener(this);
     }
 
-    String getTarget()
+    void updateStatus()
+    {
+        final String className = TimerService
+            .class
+            .getName();
+
+        Boolean isRunning = manager
+            .getRunningServices(Integer.MAX_VALUE)
+            .stream()
+            .filter(s -> s.service.getClassName().equals(className))
+            .collect(Collectors.toList())
+            .size() > 0;
+
+        String statusText = isRunning ? "Running" : "Stopped";
+        status.setText(statusText);
+    }
+
+    void updateGui()
+    {
+        target.setText(getTarget());
+        unit.setText(getUnit());
+        accepted.setText(getAccepted());
+
+        updateStatus();
+    }
+
+    void persistState()
+    {
+        setTarget(target.getText().toString());
+        setUnit(unit.getText().toString());
+        setAccepted(accepted.getText().toString());
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key)
+    {
+        updateGui();
+    }
+
+    private String getTarget()
     {
         return getString("target", "46");
     }
 
-    void setTarget(String target)
+    private void setTarget(String target)
     {
         setString("target", target);
     }
 
-    String getUnit()
+    private String getUnit()
     {
         return getString("unit", "2");
     }
 
-    void setUnit(String unit)
+    private void setUnit(String unit)
     {
         setString("unit", unit);
     }
 
-    String getAccepted()
+    private String getAccepted()
     {
         return getString("accepted", "0");
     }
 
-    void setAccepted(String accepted)
-    {
-        setString("accepted", accepted);
-    }
+    private void setAccepted(String accepted) { setString("accepted", accepted); }
 
     private String getString(String key, String defaultValue)
     {

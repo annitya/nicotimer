@@ -1,31 +1,15 @@
 package flageolett.nicotimer;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity
 {
-    private TextView status;
-    private EditText target;
-    private EditText unit;
-    private EditText accepted;
-
-    private void updateStatus()
-    {
-        ApplicationState application = (ApplicationState)getApplication();
-        String statusText = application.getStatusText();
-
-        status.setText(statusText);
-    }
-
-    private State state()
-    {
-        return ApplicationState.get();
-    }
+    private State state = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -33,38 +17,33 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        status = (TextView)findViewById(R.id.textView_status_text);
-        target = (EditText)findViewById(R.id.editText_target);
-        unit = (EditText)findViewById(R.id.editText_unit);
-        accepted = (EditText)findViewById(R.id.editText_accepted);
+        if (state != null)
+        {
+            return;
+        }
 
-        updateStatus();
-        target.setText(state().getTarget());
-        unit.setText(state().getUnit());
-        accepted.setText(state().getAccepted());
+        state = new State(this);
+        state.updateGui();
     }
 
     @Override
     protected void onPause()
     {
         super.onPause();
-
-        state().setTarget(target.getText().toString());
-        state().setUnit(unit.getText().toString());
-        state().setAccepted(accepted.getText().toString());
+        state.persistState();
     }
 
     public void startTimer(View view)
     {
         Intent intent = new Intent(this, TimerService.class);
         startService(intent);
-        updateStatus();
+        state.updateStatus();
     }
 
     public void stopTimer(View view)
     {
         Intent intent = new Intent(this, TimerService.class);
         stopService(intent);
-        updateStatus();
+        state.updateStatus();
     }
 }
