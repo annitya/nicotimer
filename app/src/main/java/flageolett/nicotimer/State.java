@@ -6,11 +6,9 @@ import android.content.SharedPreferences;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.util.stream.Collectors;
-
 class State implements SharedPreferences.OnSharedPreferenceChangeListener
 {
-    public static final String PREFERENCES = "nicotimer";
+    static final String PREFERENCES = "nicotimer";
     private SharedPreferences preferences;
     private ActivityManager manager;
 
@@ -34,18 +32,7 @@ class State implements SharedPreferences.OnSharedPreferenceChangeListener
 
     void updateStatus()
     {
-        final String className = TimerService
-            .class
-            .getName();
-
-        Boolean isRunning = manager
-            .getRunningServices(Integer.MAX_VALUE)
-            .stream()
-            .filter(s -> s.service.getClassName().equals(className))
-            .collect(Collectors.toList())
-            .size() > 0;
-
-        String statusText = isRunning ? "Running" : "Stopped";
+        String statusText = TimerService.isRunning(manager) ? "Running" : "Stopped";
         status.setText(statusText);
     }
 

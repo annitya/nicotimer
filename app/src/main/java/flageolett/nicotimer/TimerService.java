@@ -1,20 +1,18 @@
 package flageolett.nicotimer;
 
+import android.app.ActivityManager;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
-import android.util.Log;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.stream.Collectors;
 
 public class TimerService extends Service
 {
     private Timer timer;
 
-    public TimerService()
-    {
-        timer = new Timer();
-    }
+    public TimerService() { timer = new Timer(); }
 
     @Override
     public IBinder onBind(Intent intent)
@@ -25,7 +23,6 @@ public class TimerService extends Service
     @Override
     public int onStartCommand(Intent intent, int flags, int startId)
     {
-        Log.d("timer", "Starting");
         timer.schedule(new TimerTask()
         {
             @Override
@@ -35,13 +32,24 @@ public class TimerService extends Service
             }
         }, 0, 10000);
 
-        return super.onStartCommand(intent, flags, startId);
+        return START_STICKY;
     }
 
     @Override
     public void onDestroy()
     {
-        Log.d("timer", "Destroyed!");
         timer.cancel();
+    }
+
+    static Boolean isRunning(ActivityManager manager)
+    {
+        String className = TimerService.class.getName();
+
+        return manager
+            .getRunningServices(Integer.MAX_VALUE)
+            .stream()
+            .filter(s -> s.service.getClassName().equals(className))
+            .collect(Collectors.toList())
+            .size() > 0;
     }
 }

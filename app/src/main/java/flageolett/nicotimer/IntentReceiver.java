@@ -1,5 +1,6 @@
 package flageolett.nicotimer;
 
+import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -14,6 +15,7 @@ public class IntentReceiver extends BroadcastReceiver
 
         if (!accepted)
         {
+            cancelNotification(context);
             return;
         }
 
@@ -26,5 +28,17 @@ public class IntentReceiver extends BroadcastReceiver
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString("accepted", newValue.toString());
         editor.apply();
+
+        cancelNotification(context);
+    }
+
+    private void cancelNotification(Context context)
+    {
+        ((NotificationManager)context
+            .getSystemService(Context.NOTIFICATION_SERVICE))
+            .cancel("NicoTimer", 1);
+
+        Intent closeDrawerIntent = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
+        context.sendBroadcast(closeDrawerIntent);
     }
 }

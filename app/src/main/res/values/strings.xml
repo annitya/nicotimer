@@ -9,7 +9,7 @@
     <string name="main_ti_unit">2</string>
     <string name="main_t_accepted">Accepted:</string>
     <string name="main_ti_accepted">0</string>
-    <string name="nico_notification_title_template">It\'s time!</string>
+    <string name="nico_notification_title_template">Time for a fix!</string>
     <string name="accept">Accept</string>
     <string name="action_reject">Reject</string>
 </resources>

@@ -14,7 +14,7 @@ class NicoNotification
     {
         final Resources res = context.getResources();
         final String title = res.getString(R.string.nico_notification_title_template);
-        String nowOrLater = "It's now or later!";
+        String nowOrLater = "Accept?";
 
         Intent acceptIntent = new Intent(context, IntentReceiver.class).putExtra("accepted", true);
         Intent rejectIntent = new Intent(context, IntentReceiver.class).putExtra("accepted", false);
@@ -30,10 +30,10 @@ class NicoNotification
             .setContentText(nowOrLater)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setTicker(nowOrLater)
+            .setPriority(Notification.PRIORITY_MAX)
+            .setWhen(0)
             .addAction(R.drawable.ic_action_stat_share, res.getString(R.string.accept), pendingAcceptIntent)
-            .addAction(R.drawable.ic_action_stat_reply, res.getString(R.string.action_reject), pendingRejectIntent)
-            .setDeleteIntent(pendingAcceptIntent)
-            .setAutoCancel(true);
+            .addAction(R.drawable.ic_action_stat_reply, res.getString(R.string.action_reject), pendingRejectIntent);
 
         notify(context, builder.build());
     }
@@ -42,6 +42,6 @@ class NicoNotification
     {
         ((NotificationManager)context
             .getSystemService(Context.NOTIFICATION_SERVICE))
-            .notify("NicoTimer", 0, notification);
+            .notify("NicoTimer", 1, notification);
     }
 }
