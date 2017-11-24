@@ -15,6 +15,7 @@ class State implements SharedPreferences.OnSharedPreferenceChangeListener
     private EditText target;
     private EditText unit;
     private EditText accepted;
+    private EditText startDate;
     private TextView status;
 
     State(MainActivity mainActivity)
@@ -26,6 +27,7 @@ class State implements SharedPreferences.OnSharedPreferenceChangeListener
         target = (EditText)mainActivity.findViewById(R.id.editText_target);
         unit = (EditText)mainActivity.findViewById(R.id.editText_unit);
         accepted = (EditText)mainActivity.findViewById(R.id.editText_accepted);
+        startDate = (EditText)mainActivity.findViewById(R.id.editText_startDate);
 
         preferences.registerOnSharedPreferenceChangeListener(this);
     }
@@ -41,6 +43,7 @@ class State implements SharedPreferences.OnSharedPreferenceChangeListener
         target.setText(getTarget());
         unit.setText(getUnit());
         accepted.setText(getAccepted());
+        startDate.setText(getStartDate());
 
         updateStatus();
     }
@@ -50,6 +53,7 @@ class State implements SharedPreferences.OnSharedPreferenceChangeListener
         setTarget(target.getText().toString());
         setUnit(unit.getText().toString());
         setAccepted(accepted.getText().toString());
+        setStartDate(startDate.getText().toString());
     }
 
     @Override
@@ -84,6 +88,10 @@ class State implements SharedPreferences.OnSharedPreferenceChangeListener
     }
 
     private void setAccepted(String accepted) { setString("accepted", accepted); }
+
+    private String getStartDate() { return getString("startDate", ""); }
+
+    private void setStartDate(String startDate) { setString("startDate", startDate); }
 
     private String getString(String key, String defaultValue)
     {
