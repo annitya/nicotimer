@@ -3,10 +3,8 @@ Nicotimer
 
 Todo
 ----
-1. Calculate time until next notification.
-2. Take number hours the service has been active into account.
-3. Reduce the number of max-accepted based on withdrawal graph.
 
-Roadmap
--------
-Is it possible to use volume-buttons to accept/reject notifications?
+1. Reduce the number of max-accepted based on withdrawal graph.
+2. Remove actions and use click instead.
+3. Make state accessible from all contexts.
+4. Do away with silly conversions.

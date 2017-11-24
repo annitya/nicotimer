@@ -12,16 +12,15 @@ public class IntentReceiver extends BroadcastReceiver
     public void onReceive(Context context, Intent intent)
     {
         Boolean accepted = intent.getBooleanExtra("accepted", false);
-
-        if (!accepted)
-        {
-            cancelNotification(context);
-            return;
-        }
-
         SharedPreferences preferences = context.getSharedPreferences(State.PREFERENCES, Context.MODE_PRIVATE);
 
         Integer unit = Integer.parseInt(preferences.getString("unit", "2"));
+
+        if (!accepted)
+        {
+            unit = 0;
+        }
+
         Integer currentAccepted = Integer.parseInt(preferences.getString("accepted", "0"));
         Integer newValue = unit + currentAccepted;
 
@@ -30,6 +29,7 @@ public class IntentReceiver extends BroadcastReceiver
         editor.apply();
 
         cancelNotification(context);
+        scheduleNextNotification(context);
     }
 
     private void cancelNotification(Context context)
@@ -40,5 +40,11 @@ public class IntentReceiver extends BroadcastReceiver
 
         Intent closeDrawerIntent = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
         context.sendBroadcast(closeDrawerIntent);
+    }
+
+    private void scheduleNextNotification(Context context)
+    {
+        Intent intent = new Intent(context, TimerService.class);
+        context.startService(intent);
     }
 }

@@ -2,15 +2,19 @@ package flageolett.nicotimer;
 
 import android.app.ActivityManager;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.IBinder;
+
+import java.util.Date;
 import java.util.Timer;
-import java.util.TimerTask;
 import java.util.stream.Collectors;
 
 public class TimerService extends Service
 {
     private Timer timer;
+    private Date initialStart;
 
     public TimerService() { timer = new Timer(); }
 
@@ -23,22 +27,42 @@ public class TimerService extends Service
     @Override
     public int onStartCommand(Intent intent, int flags, int startId)
     {
-        timer.schedule(new TimerTask()
-        {
-            @Override
-            public void run()
-            {
-                NicoNotification.notify(getApplicationContext());
-            }
-        }, 0, 10000);
+        Long delay = calculateNextDelay();
 
-        return START_STICKY;
+        IntervalTimer intervalTimer = new IntervalTimer(getApplicationContext());
+        timer.schedule(intervalTimer, delay);
+
+        return super.onStartCommand(intent, flags, startId);
     }
 
     @Override
     public void onDestroy()
     {
         timer.cancel();
+    }
+
+    private Long calculateNextDelay()
+    {
+        if (initialStart == null)
+        {
+            initialStart = new Date();
+            return 0L;
+        }
+
+        SharedPreferences preferences = getSharedPreferences(State.PREFERENCES, Context.MODE_PRIVATE);
+
+        Date now = new Date();
+        Long passedTime = now.getTime() - initialStart.getTime();
+        Double lengthOfDay = 16.5 * 60 * 60 * 1000;
+        Double remainingTime = lengthOfDay - passedTime;
+
+        Integer target = Integer.parseInt(preferences.getString("target", "0"));
+        Integer accepted = Integer.parseInt(preferences.getString("accepted", "0"));
+
+        Integer remainingHits = target - accepted;
+        Double nextInterval = remainingTime / remainingHits;
+
+        return Math.round(nextInterval);
     }
 
     static Boolean isRunning(ActivityManager manager)
