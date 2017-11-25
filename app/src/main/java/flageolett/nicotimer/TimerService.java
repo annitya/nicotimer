@@ -7,9 +7,7 @@ import android.os.IBinder;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-import java.util.Timer;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class TimerService extends Service
@@ -50,7 +48,6 @@ public class TimerService extends Service
 
         State state = State.getInstance(this);
 
-        Integer target = state.getTarget();
         String startDateText = state.getStartDate();
         DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
 
@@ -64,23 +61,52 @@ public class TimerService extends Service
             return;
         }
 
-        // http://www.nicobloc.com/images/graph5.jpg
-        //
-        // The rule of thumb is to reduce by 1/5 by end of 1st week
-        // Reduce by 1/4 by end of week 2 compared to begining of week 2
-        // Reduce by 1/3 by end of week 3 compared to begining of week 3
-        // Reduce by 1/2 by end of week 4 compared to begining of week 4
-        // Continue reducing by 1/2 in remaining weeks.
-
         Date now = new Date();
         Long duration = now.getTime() - startDate.getTime();
+        Integer daysPassed = Math.round(duration / 24 / 60 / 60 / 1000);
 
-        Double daysPassed = duration / 24 / 60 / 60 / 1000d;
-        Double reductionPercentage = daysPassed / 7 / 5;
-        Long newTarget = Math.round(target - (target * reductionPercentage));
+        Integer target = state.getTarget();
+        Long newTarget = Math.round(calculateNextTarget(daysPassed, target));
 
         state.setCurrentTarget(newTarget.toString());
         state.setNextHit(0L);
+    }
+
+    private Double calculateNextTarget(Integer daysPassed, Integer originalTarget)
+    {
+        Integer remainderDays = daysPassed % 7;
+        Integer numberOfWeeks = Math.round((daysPassed - remainderDays) / 7);
+
+        // Reduce by 1/5 by end of 1st week.
+        // Reduce by 1/4 by end of week 2 compared to begining of week 2.
+        // Reduce by 1/3 by end of week 3 compared to begining of week 3.
+        // Continue reducing by 1/2 in remaining weeks.
+        Double[] reductionFactors = {1/5d, 1/4d, 1/3d, 1/2d};
+
+        List<Double> currentFactors = new ArrayList<>();
+        Double currentFactor = reductionFactors[0];
+
+        for (Integer currentWeek = 0; currentWeek < numberOfWeeks; currentWeek++)
+        {
+            currentFactors.add(currentFactor);
+
+            if (currentWeek < reductionFactors.length)
+            {
+                currentFactor = reductionFactors[currentWeek];
+            }
+        }
+
+        Double remainderFactor = remainderDays / 7d * currentFactor;
+        currentFactors.add(remainderFactor);
+
+        Double newTarget = (double)originalTarget;
+
+        for (Double factor : currentFactors)
+        {
+            newTarget -= newTarget * factor;
+        }
+
+        return newTarget;
     }
 
     private Long calculateNextDelay()
