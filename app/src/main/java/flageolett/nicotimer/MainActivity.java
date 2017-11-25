@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements OnSharedPreferenceChangeListener
@@ -18,6 +17,11 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
     private TextView getStatusTextView()
     {
         return (TextView)findViewById(R.id.textView_status_text);
+    }
+
+    private TextView getNextHitTextView()
+    {
+        return (TextView)findViewById(R.id.textView_nextHit_text);
     }
 
     EditText getTargetEditText()
@@ -80,16 +84,17 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
     {
         State state = State.getInstance(this);
 
-        String target = String.format(Locale.ENGLISH,"%d", state.getTarget());
+        String target = String.format(Locale.getDefault(),"%d", state.getTarget());
         getTargetEditText().setText(target);
 
-        String unit = String.format(Locale.ENGLISH,"%d", state.getUnit());
+        String unit = String.format(Locale.getDefault(),"%d", state.getUnit());
         getUnitEditText().setText(unit);
 
-        String accepted = String.format(Locale.ENGLISH,"%d", state.getAccepted());
+        String accepted = String.format(Locale.getDefault(),"%d", state.getAccepted());
         getAcceptedEditText().setText(accepted);
 
         getStartDateEditText().setText(state.getStartDate());
+        getNextHitTextView().setText(state.getNextHit());
     }
 
     private void updateStatus()

@@ -2,6 +2,9 @@ package flageolett.nicotimer;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 class State
 {
@@ -82,6 +85,28 @@ class State
     {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString("startDate", startDate);
+        editor.apply();
+    }
+
+    String getNextHit()
+    {
+        Long nextHit = preferences.getLong("nextHit", 0);
+
+        if (nextHit == 0)
+        {
+            return "";
+        }
+
+        Date nextHitDate = new Date(nextHit);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
+
+        return dateFormat.format(nextHitDate);
+    }
+
+    void setNextHit(Long nextHit)
+    {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putLong("nextHit", nextHit);
         editor.apply();
     }
 

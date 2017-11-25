@@ -34,6 +34,10 @@ public class TimerService extends Service
         {
             IntervalTimer intervalTimer = new IntervalTimer(this);
             timer.schedule(intervalTimer, delay);
+            Long nextHit = intervalTimer.scheduledExecutionTime();
+            State
+                .getInstance(this)
+                .setNextHit(nextHit);
         }
 
         return super.onStartCommand(intent, flags, startId);
@@ -48,7 +52,7 @@ public class TimerService extends Service
 
         Integer target = state.getTarget();
         String startDateText = state.getStartDate();
-        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.ENGLISH);
+        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
 
         Date startDate;
         try
@@ -76,6 +80,7 @@ public class TimerService extends Service
         Long newTarget = Math.round(target - (target * reductionPercentage));
 
         state.setTarget(Math.toIntExact(newTarget));
+        state.setNextHit(0L);
     }
 
     private Long calculateNextDelay()

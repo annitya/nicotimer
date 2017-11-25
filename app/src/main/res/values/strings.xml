@@ -13,4 +13,5 @@
     <string name="accept">Accept</string>
     <string name="action_reject">Reject</string>
     <string name="main_t_startDate">Start date:</string>
+    <string name="main_t_nextHit">Next hit:</string>
 </resources>

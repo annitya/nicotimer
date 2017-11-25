@@ -91,5 +91,17 @@
               android:layout_marginStart="32dp"
               app:layout_constraintLeft_toRightOf="@+id/textView_StartDate" android:layout_marginLeft="32dp"
               android:layout_marginBottom="0dp" app:layout_constraintBaseline_toBaselineOf="@+id/textView_StartDate"/>
+    <TextView
+        android:text="@string/main_t_nextHit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" tools:layout_editor_absoluteY="208dp" tools:layout_editor_absoluteX="44dp"
+        android:id="@+id/textView_nextHit" app:layout_constraintLeft_toLeftOf="@+id/textView_StartDate"
+        app:layout_constraintTop_toBottomOf="@+id/textView_StartDate" android:layout_marginTop="16dp"/>
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" tools:layout_editor_absoluteX="152dp"
+        android:id="@+id/textView_nextHit_text" app:layout_constraintBaseline_toBaselineOf="@+id/textView_nextHit"
+        app:layout_constraintLeft_toRightOf="@+id/textView_StartDate" android:layout_marginLeft="32dp"/>
 
 </android.support.constraint.ConstraintLayout>
