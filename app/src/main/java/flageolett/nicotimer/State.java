@@ -1,107 +1,111 @@
 package flageolett.nicotimer;
 
-import android.app.ActivityManager;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.widget.EditText;
-import android.widget.TextView;
 
-class State implements SharedPreferences.OnSharedPreferenceChangeListener
+class State
 {
-    static final String PREFERENCES = "nicotimer";
+    private static final String PREFERENCES = "nicotimer";
     private SharedPreferences preferences;
-    private ActivityManager manager;
 
-    private EditText target;
-    private EditText unit;
-    private EditText accepted;
-    private EditText startDate;
-    private TextView status;
-
-    State(MainActivity mainActivity)
+    static State getInstance(Context context)
     {
-        preferences = mainActivity.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
-        manager = (ActivityManager)mainActivity.getSystemService(Context.ACTIVITY_SERVICE);
-
-        status = (TextView)mainActivity.findViewById(R.id.textView_status_text);
-        target = (EditText)mainActivity.findViewById(R.id.editText_target);
-        unit = (EditText)mainActivity.findViewById(R.id.editText_unit);
-        accepted = (EditText)mainActivity.findViewById(R.id.editText_accepted);
-        startDate = (EditText)mainActivity.findViewById(R.id.editText_startDate);
-
-        preferences.registerOnSharedPreferenceChangeListener(this);
+        return new State(context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE));
     }
 
-    void updateStatus()
+    private State(SharedPreferences preferences)
     {
-        String statusText = TimerService.isRunning(manager) ? "Running" : "Stopped";
-        status.setText(statusText);
+        this.preferences = preferences;
     }
 
-    void updateGui()
+    void addChangeListener(SharedPreferences.OnSharedPreferenceChangeListener listener)
     {
-        target.setText(getTarget());
-        unit.setText(getUnit());
-        accepted.setText(getAccepted());
-        startDate.setText(getStartDate());
-
-        updateStatus();
+        preferences.registerOnSharedPreferenceChangeListener(listener);
     }
 
-    void persistState()
+    void clearChangeListener(SharedPreferences.OnSharedPreferenceChangeListener listener)
     {
-        setTarget(target.getText().toString());
-        setUnit(unit.getText().toString());
-        setAccepted(accepted.getText().toString());
-        setStartDate(startDate.getText().toString());
+        preferences.unregisterOnSharedPreferenceChangeListener(listener);
     }
 
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key)
+    Integer getTarget()
     {
-        updateGui();
+        return getInteger("target", 1);
     }
 
-    private String getTarget()
+    void setTarget(Integer target)
     {
-        return getString("target", "46");
+        setInteger("target", target);
     }
 
-    private void setTarget(String target)
+    void setTarget(CharSequence target)
     {
-        setString("target", target);
+        setTarget(charSequenceToInteger(target, 1));
     }
 
-    private String getUnit()
+    Integer getUnit()
     {
-        return getString("unit", "2");
+        return getInteger("unit", 1);
     }
 
-    private void setUnit(String unit)
+    private void setUnit(Integer unit)
     {
-        setString("unit", unit);
+        setInteger("unit", unit);
     }
 
-    private String getAccepted()
+    void setUnit(CharSequence unit)
     {
-        return getString("accepted", "0");
+        setUnit(charSequenceToInteger(unit, 1));
     }
 
-    private void setAccepted(String accepted) { setString("accepted", accepted); }
-
-    private String getStartDate() { return getString("startDate", ""); }
-
-    private void setStartDate(String startDate) { setString("startDate", startDate); }
-
-    private String getString(String key, String defaultValue)
+    Integer getAccepted()
     {
-        return preferences.getString(key, defaultValue);
+        return getInteger("accepted", 0);
     }
 
-    private void setString(String key, String value)
+    void setAccepted(Integer accepted)
+    {
+        setInteger("accepted", accepted);
+    }
+
+    void setAccepted(CharSequence accepted)
+    {
+        setAccepted(charSequenceToInteger(accepted, 0));
+    }
+
+    String getStartDate()
+    {
+        return preferences.getString("startDate", "");
+    }
+
+    void setStartDate(String startDate)
     {
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(key, value);
+        editor.putString("startDate", startDate);
+        editor.apply();
+    }
+
+    private Integer charSequenceToInteger(CharSequence sequence, Integer defaultValue)
+    {
+        try
+        {
+            return Integer.parseInt(sequence.toString());
+        }
+        catch (NumberFormatException e)
+        {
+            return defaultValue;
+        }
+    }
+
+    private Integer getInteger(String key, Integer defaultValue)
+    {
+        return preferences.getInt(key, defaultValue);
+    }
+
+    private void setInteger(String key, Integer value)
+    {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt(key, value);
         editor.apply();
     }
 }

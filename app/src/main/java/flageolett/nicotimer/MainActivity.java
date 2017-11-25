@@ -1,13 +1,44 @@
 package flageolett.nicotimer;
 
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity
+import java.util.Locale;
+
+public class MainActivity extends AppCompatActivity implements OnSharedPreferenceChangeListener
 {
-    private State state = null;
+    private TextView getStatusTextView()
+    {
+        return (TextView)findViewById(R.id.textView_status_text);
+    }
+
+    EditText getTargetEditText()
+    {
+        return (EditText)findViewById(R.id.editText_target);
+    }
+
+    EditText getUnitEditText()
+    {
+        return (EditText)findViewById(R.id.editText_unit);
+    }
+
+    EditText getAcceptedEditText()
+    {
+        return (EditText)findViewById(R.id.editText_accepted);
+    }
+
+    EditText getStartDateEditText()
+    {
+        return (EditText)findViewById(R.id.editText_startDate);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -15,33 +46,56 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (state != null)
-        {
-            return;
-        }
+        // Persist GUI-changes to state.
+        GuiStateWatcher.registerChangedListeners(this);
 
-        state = new State(this);
-        state.updateGui();
-    }
+        // Reflect state-changes in GUI.
+        State.getInstance(this).addChangeListener(this);
 
-    @Override
-    protected void onPause()
-    {
-        super.onPause();
-        state.persistState();
+        // Load state.
+        onSharedPreferenceChanged(null, null);
+
+        // Is the service running?
+        updateStatus();
     }
 
     public void startTimer(View view)
     {
         Intent intent = new Intent(this, TimerService.class);
         startService(intent);
-        state.updateStatus();
+
+        updateStatus();
     }
 
     public void stopTimer(View view)
     {
         Intent intent = new Intent(this, TimerService.class);
         stopService(intent);
-        state.updateStatus();
+
+        updateStatus();
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key)
+    {
+        State state = State.getInstance(this);
+
+        String target = String.format(Locale.ENGLISH,"%d", state.getTarget());
+        getTargetEditText().setText(target);
+
+        String unit = String.format(Locale.ENGLISH,"%d", state.getUnit());
+        getUnitEditText().setText(unit);
+
+        String accepted = String.format(Locale.ENGLISH,"%d", state.getAccepted());
+        getAcceptedEditText().setText(accepted);
+
+        getStartDateEditText().setText(state.getStartDate());
+    }
+
+    private void updateStatus()
+    {
+        ActivityManager manager = (ActivityManager)getSystemService(Context.ACTIVITY_SERVICE);
+        String statusText = TimerService.isRunning(manager) ? "Running" : "Stopped";
+        getStatusTextView().setText(statusText);
     }
 }
