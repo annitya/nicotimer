@@ -134,6 +134,13 @@ public class TimerService extends Service
             return -1L;
         }
 
+        // Somebody stayed up late, revert to average interval.
+        if (remainingTime < lengthOfDay)
+        {
+            remainingTime = lengthOfDay;
+            remainingHits = currentTarget;
+        }
+
         Double nextInterval = remainingTime / remainingHits;
 
         return Math.round(nextInterval);
