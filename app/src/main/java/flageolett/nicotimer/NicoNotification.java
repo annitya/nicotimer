@@ -14,7 +14,6 @@ class NicoNotification
     {
         final Resources res = context.getResources();
         final String title = res.getString(R.string.nico_notification_title_template);
-        String nowOrLater = "Accept?";
 
         Intent acceptIntent = new Intent(context, IntentReceiver.class).putExtra("accepted", true);
         Intent rejectIntent = new Intent(context, IntentReceiver.class).putExtra("accepted", false);
@@ -27,13 +26,14 @@ class NicoNotification
             .setDefaults(Notification.DEFAULT_ALL)
             .setSmallIcon(R.drawable.ic_stat_nico)
             .setContentTitle(title)
-            .setContentText(nowOrLater)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            .setTicker(nowOrLater)
             .setPriority(Notification.PRIORITY_MAX)
             .setWhen(0)
-            .addAction(R.drawable.ic_action_stat_share, res.getString(R.string.accept), pendingAcceptIntent)
-            .addAction(R.drawable.ic_action_stat_reply, res.getString(R.string.action_reject), pendingRejectIntent);
+            .setAutoCancel(true)
+            .setContentIntent(pendingAcceptIntent)
+            .setDeleteIntent(pendingAcceptIntent)
+            .addAction(R.drawable.ic_action_stat_reply, res.getString(R.string.action_reject), pendingRejectIntent)
+            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
 
         notify(context, builder.build());
     }

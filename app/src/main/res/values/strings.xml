@@ -11,8 +11,7 @@
     <string name="main_t_accepted">Accepted:</string>
     <string name="main_ti_accepted">0</string>
     <string name="nico_notification_title_template">Time for a fix!</string>
-    <string name="accept">Accept</string>
-    <string name="action_reject">Reject</string>
+    <string name="action_reject">No thanks!</string>
     <string name="main_t_startDate">Start date:</string>
     <string name="main_t_nextHit">Next hit:</string>
 </resources>
