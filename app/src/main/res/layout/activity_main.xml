@@ -52,9 +52,9 @@
     <TextView android:text="@string/main_t_unit" android:layout_width="wrap_content"
               android:layout_height="wrap_content" android:id="@+id/textView_unit"
               tools:layout_constraintTop_creator="1"
-              app:layout_constraintTop_toBottomOf="@+id/textView_target" tools:layout_constraintLeft_creator="1"
+              app:layout_constraintTop_toBottomOf="@+id/textView_currentTarget" tools:layout_constraintLeft_creator="1"
               android:layout_marginTop="15dp"
-              app:layout_constraintLeft_toLeftOf="@+id/textView_target"/>
+              app:layout_constraintLeft_toLeftOf="@+id/textView_currentTarget"/>
     <EditText android:textSize="15sp" android:layout_width="wrap_content" android:layout_height="wrap_content"
               android:inputType="text"
               android:text="@string/main_ti_unit" android:ems="10" android:id="@+id/editText_unit"
@@ -102,6 +102,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" tools:layout_editor_absoluteX="152dp"
         android:id="@+id/textView_nextHit_text" app:layout_constraintBaseline_toBaselineOf="@+id/textView_nextHit"
+        app:layout_constraintLeft_toRightOf="@+id/textView_StartDate" android:layout_marginLeft="32dp"/>
+    <TextView
+        android:text="@string/main_t_currentTarget"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" tools:layout_editor_absoluteY="247dp" tools:layout_editor_absoluteX="44dp"
+        android:id="@+id/textView_currentTarget" tools:text="@string/main_t_currentTarget"
+        app:layout_constraintLeft_toLeftOf="@+id/textView_target"
+        app:layout_constraintTop_toBottomOf="@+id/textView_target" android:layout_marginLeft="0dp"
+        android:layout_marginTop="16dp"/>
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView_currentTarget_text"
+        app:layout_constraintBaseline_toBaselineOf="@+id/textView_currentTarget"
         app:layout_constraintLeft_toRightOf="@+id/textView_StartDate" android:layout_marginLeft="32dp"/>
 
 </android.support.constraint.ConstraintLayout>

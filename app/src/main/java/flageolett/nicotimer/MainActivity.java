@@ -24,6 +24,11 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
         return (TextView)findViewById(R.id.textView_nextHit_text);
     }
 
+    TextView getCurrentTargetTextView()
+    {
+        return (TextView) findViewById(R.id.textView_currentTarget_text);
+    }
+
     EditText getTargetEditText()
     {
         return (EditText)findViewById(R.id.editText_target);
@@ -95,6 +100,7 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 
         getStartDateEditText().setText(state.getStartDate());
         getNextHitTextView().setText(state.getNextHit());
+        getCurrentTargetTextView().setText(state.getCurrentTarget());
     }
 
     private void updateStatus()

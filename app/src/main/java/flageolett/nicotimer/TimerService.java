@@ -79,7 +79,7 @@ public class TimerService extends Service
         Double reductionPercentage = daysPassed / 7 / 5;
         Long newTarget = Math.round(target - (target * reductionPercentage));
 
-        state.setTarget(Math.toIntExact(newTarget));
+        state.setCurrentTarget(newTarget.toString());
         state.setNextHit(0L);
     }
 
@@ -98,10 +98,10 @@ public class TimerService extends Service
         Double lengthOfDay = 16.5 * 60 * 60 * 1000;
         Double remainingTime = lengthOfDay - passedTime;
 
-        Integer target = state.getTarget();
+        Integer currentTarget = Integer.parseInt(state.getCurrentTarget());
         Integer accepted = state.getAccepted();
 
-        Integer remainingHits = target - accepted;
+        Integer remainingHits = currentTarget - accepted;
 
         if (remainingHits == 0)
         {

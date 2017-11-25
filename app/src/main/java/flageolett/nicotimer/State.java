@@ -36,7 +36,7 @@ class State
         return getInteger("target", 1);
     }
 
-    void setTarget(Integer target)
+    private void setTarget(Integer target)
     {
         setInteger("target", target);
     }
@@ -44,6 +44,16 @@ class State
     void setTarget(CharSequence target)
     {
         setTarget(charSequenceToInteger(target, 1));
+    }
+
+    String getCurrentTarget()
+    {
+        return getString("currentTarget", getTarget().toString());
+    }
+
+    void setCurrentTarget(String currentTarget)
+    {
+        setString("currentTarget", currentTarget);
     }
 
     Integer getUnit()
@@ -78,14 +88,12 @@ class State
 
     String getStartDate()
     {
-        return preferences.getString("startDate", "");
+        return getString("startDate", "");
     }
 
     void setStartDate(String startDate)
     {
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString("startDate", startDate);
-        editor.apply();
+        setString("startDate", startDate);
     }
 
     String getNextHit()
@@ -120,6 +128,18 @@ class State
         {
             return defaultValue;
         }
+    }
+
+    private String getString(String key, String defaultValue)
+    {
+        return preferences.getString(key, defaultValue);
+    }
+
+    private void setString(String key, String value)
+    {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(key, value);
+        editor.apply();
     }
 
     private Integer getInteger(String key, Integer defaultValue)
