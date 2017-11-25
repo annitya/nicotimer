@@ -70,6 +70,7 @@ public class TimerService extends Service
 
         state.setCurrentTarget(newTarget.toString());
         state.setNextHit(0L);
+        state.setAccepted(0);
     }
 
     private Double calculateNextTarget(Integer daysPassed, Integer originalTarget)
