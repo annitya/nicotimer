@@ -136,7 +136,7 @@ public class TimerService extends Service
         }
 
         // Somebody stayed up late, revert to average interval.
-        if (remainingTime < lengthOfDay)
+        if (remainingTime <= 0)
         {
             remainingTime = lengthOfDay;
             remainingHits = currentTarget;
