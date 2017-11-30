@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Nicotimer</string>
     <string name="main_t_status">Status:</string>
+    <string name="main_t_status_running">Running</string>
+    <string name="main_t_status_stopped">Stopped</string>
     <string name="main_button_start">Start</string>
     <string name="main_button_stop">Stop</string>
     <string name="main_t_target">Target:</string>

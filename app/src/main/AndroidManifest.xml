@@ -13,7 +13,7 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".TimerService" android:enabled="true" android:exported="false" />
+        <receiver android:name=".NicoNotification" />
         <receiver android:name=".IntentReceiver" />
     </application>
 

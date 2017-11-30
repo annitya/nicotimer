@@ -1,8 +1,5 @@
 package flageolett.nicotimer;
 
-import android.app.ActivityManager;
-import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +11,8 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements OnSharedPreferenceChangeListener
 {
+    private NicoTimer timer;
+
     private TextView getStatusTextView()
     {
         return (TextView)findViewById(R.id.textView_status_text);
@@ -24,7 +23,7 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
         return (TextView)findViewById(R.id.textView_nextHit_text);
     }
 
-    TextView getCurrentTargetTextView()
+    private TextView getCurrentTargetTextView()
     {
         return (TextView) findViewById(R.id.textView_currentTarget_text);
     }
@@ -64,23 +63,26 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
         // Load state.
         onSharedPreferenceChanged(null, null);
 
-        // Is the service running?
+        timer = new NicoTimer(this);
         updateStatus();
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        getStatusTextView().setText(R.string.main_t_status_stopped);
     }
 
     public void startTimer(View view)
     {
-        Intent intent = new Intent(this, TimerService.class);
-        startService(intent);
-
+        timer.start();
         updateStatus();
     }
 
     public void stopTimer(View view)
     {
-        Intent intent = new Intent(this, TimerService.class);
-        stopService(intent);
-
+        timer.stop();
         updateStatus();
     }
 
@@ -105,8 +107,7 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 
     private void updateStatus()
     {
-        ActivityManager manager = (ActivityManager)getSystemService(Context.ACTIVITY_SERVICE);
-        String statusText = TimerService.isRunning(manager) ? "Running" : "Stopped";
-        getStatusTextView().setText(statusText);
+        Integer statusTextId = timer.isRunning() ? R.string.main_t_status_running : R.string.main_t_status_stopped;
+        getStatusTextView().setText(statusTextId);
     }
 }

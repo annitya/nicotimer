@@ -34,7 +34,8 @@ public class IntentReceiver extends BroadcastReceiver
 
     private void scheduleNextNotification(Context context)
     {
-        Intent intent = new Intent(context, TimerService.class);
-        context.startService(intent);
+        NicoTimer timer = new NicoTimer(context);
+        Long nextDelay = timer.getNextDelay();
+        timer.scheduleNextPush(nextDelay);
     }
 }

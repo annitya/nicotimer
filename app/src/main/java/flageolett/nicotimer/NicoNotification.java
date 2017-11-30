@@ -3,14 +3,16 @@ package flageolett.nicotimer;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.support.v4.app.NotificationCompat;
 
-class NicoNotification
+public class NicoNotification extends BroadcastReceiver
 {
-    static void notify(final Context context)
+    @Override
+    public void onReceive(Context context, Intent intent)
     {
         final Resources res = context.getResources();
         final String title = res.getString(R.string.nico_notification_title_template);
@@ -35,13 +37,8 @@ class NicoNotification
             .addAction(R.drawable.ic_action_stat_reply, res.getString(R.string.action_reject), pendingRejectIntent)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
 
-        notify(context, builder.build());
-    }
-
-    private static void notify(final Context context, final Notification notification)
-    {
         ((NotificationManager)context
             .getSystemService(Context.NOTIFICATION_SERVICE))
-            .notify("NicoTimer", 1, notification);
+            .notify("NicoTimer", 1, builder.build());
     }
 }
