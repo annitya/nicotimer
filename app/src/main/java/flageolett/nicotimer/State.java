@@ -1,6 +1,5 @@
 package flageolett.nicotimer;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -8,15 +7,9 @@ import java.util.Locale;
 
 class State
 {
-    private static final String PREFERENCES = "nicotimer";
     private SharedPreferences preferences;
 
-    static State getInstance(Context context)
-    {
-        return new State(context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE));
-    }
-
-    private State(SharedPreferences preferences)
+    State(SharedPreferences preferences)
     {
         this.preferences = preferences;
     }

@@ -58,12 +58,18 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
         GuiStateWatcher.registerChangedListeners(this);
 
         // Reflect state-changes in GUI.
-        State.getInstance(this).addChangeListener(this);
+        Factory
+            .getInstance(this)
+            .getState()
+            .addChangeListener(this);
 
         // Load state.
         onSharedPreferenceChanged(null, null);
 
-        timer = new NicoTimer(this);
+        timer = Factory
+            .getInstance(this)
+            .getNicoTimer();
+
         updateStatus();
     }
 
@@ -89,7 +95,9 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key)
     {
-        State state = State.getInstance(this);
+        State state = Factory
+            .getInstance(this)
+            .getState();
 
         String target = String.format(Locale.getDefault(),"%d", state.getTarget());
         getTargetEditText().setText(target);

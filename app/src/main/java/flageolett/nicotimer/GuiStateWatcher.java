@@ -7,7 +7,9 @@ class GuiStateWatcher
 {
     static void registerChangedListeners(MainActivity activity)
     {
-        State state = State.getInstance(activity);
+        State state = Factory
+            .getInstance(activity)
+            .getState();
 
         abstract class Watcher implements TextWatcher
         {

@@ -4,6 +4,7 @@ import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import java.util.Date;
 
 public class IntentReceiver extends BroadcastReceiver
 {
@@ -11,7 +12,9 @@ public class IntentReceiver extends BroadcastReceiver
     public void onReceive(Context context, Intent intent)
     {
         Boolean accepted = intent.getBooleanExtra("accepted", false);
-        State state = State.getInstance(context);
+        State state = Factory
+            .getInstance(context)
+            .getState();
 
         Integer unit = accepted ? state.getUnit() : 0;
         Integer currentAccepted = state.getAccepted();
@@ -34,8 +37,11 @@ public class IntentReceiver extends BroadcastReceiver
 
     private void scheduleNextNotification(Context context)
     {
-        NicoTimer timer = new NicoTimer(context);
-        Long nextDelay = timer.getNextDelay();
+        NicoTimer timer = Factory
+            .getInstance(context)
+            .getNicoTimer();
+
+        Long nextDelay = timer.getNextDelay(new Date().getTime());
         timer.scheduleNextPush(nextDelay);
     }
 }

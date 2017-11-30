@@ -11,11 +11,15 @@ import java.util.*;
 
 class NicoTimer
 {
-    private Context context;
     private PendingIntent currentIntent;
+    private State state;
+    private AlarmManager alarmManager;
+    private Context context;
 
-    NicoTimer(Context context)
+    NicoTimer(State state, AlarmManager alarmManager, Context context)
     {
+        this.state = state;
+        this.alarmManager = alarmManager;
         this.context = context;
     }
 
@@ -26,15 +30,11 @@ class NicoTimer
 
     void stop()
     {
-        AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-
         if (currentIntent != null)
         {
             alarmManager.cancel(currentIntent);
             currentIntent = null;
         }
-
-        State state = State.getInstance(context);
 
         String startDateText = state.getStartDate();
         DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
@@ -68,30 +68,23 @@ class NicoTimer
 
     void scheduleNextPush(Long delay)
     {
-        AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-
         Intent notificationIntent = new Intent(context, NicoNotification.class);
         currentIntent = PendingIntent.getBroadcast(context, 100, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Long nextPushTime = new Date().getTime() + delay;
         alarmManager.set(AlarmManager.RTC_WAKEUP, nextPushTime, currentIntent);
 
-        State
-            .getInstance(context)
-            .setNextHit(nextPushTime);
+        state.setNextHit(nextPushTime);
     }
 
-    Long getNextDelay()
+    Long getNextDelay(Long now)
     {
-        State state = State.getInstance(context);
-
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR, 7);
         calendar.set(Calendar.MINUTE, 30);
         calendar.set(Calendar.SECOND, 0);
 
-        Date now = new Date();
-        Long passedTime = now.getTime() - calendar.getTimeInMillis();
+        Long passedTime = now - calendar.getTimeInMillis();
         Double lengthOfDay = 16.5 * 60 * 60 * 1000;
         Double remainingTime = lengthOfDay - passedTime;
 
