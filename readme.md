@@ -28,6 +28,5 @@ with the sole purpose of keeping withdrawals to a minimum.
 Todo
 ----
  
-1. Better separation of concerns between TimerService and IntervalTimer.
-2. Instructions too long => improve UX.
+1. Instructions too long => improve UX.
 
