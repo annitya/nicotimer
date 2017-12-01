@@ -1,6 +1,9 @@
 package flageolett.nicotimer;
 
 import android.content.SharedPreferences;
+
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -79,9 +82,27 @@ class State
         setAccepted(charSequenceToInteger(accepted, 0));
     }
 
-    String getStartDate()
+    String getStartDateString()
     {
         return getString("startDate", "");
+    }
+
+    Long getStartDate()
+    {
+        String startDateText = getStartDateString();
+        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
+
+        try
+        {
+            return dateFormat
+                .parse(startDateText)
+                .getTime();
+
+        }
+        catch (ParseException e)
+        {
+            return 0L;
+        }
     }
 
     void setStartDate(String startDate)

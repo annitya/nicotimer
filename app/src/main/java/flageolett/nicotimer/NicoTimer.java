@@ -36,21 +36,8 @@ class NicoTimer
             currentIntent = null;
         }
 
-        String startDateText = state.getStartDate();
-        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
-
-        Date startDate;
-        try
-        {
-            startDate = dateFormat.parse(startDateText);
-        }
-        catch (ParseException e)
-        {
-            return;
-        }
-
         Date now = new Date();
-        Long duration = now.getTime() - startDate.getTime();
+        Long duration = now.getTime() - state.getStartDate();
         Integer daysPassed = Math.round(duration / 24 / 60 / 60 / 1000);
 
         Integer target = state.getTarget();
@@ -79,12 +66,7 @@ class NicoTimer
 
     Long getNextDelay(Long now)
     {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR, 7);
-        calendar.set(Calendar.MINUTE, 30);
-        calendar.set(Calendar.SECOND, 0);
-
-        Long passedTime = now - calendar.getTimeInMillis();
+        Long passedTime = now - Factory.getStartOfDay();
         Double lengthOfDay = 16.5 * 60 * 60 * 1000;
         Double remainingTime = lengthOfDay - passedTime;
 

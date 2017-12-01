@@ -3,6 +3,8 @@ package flageolett.nicotimer;
 import android.app.AlarmManager;
 import android.content.Context;
 
+import java.util.Calendar;
+
 class Factory
 {
     private static final String PREFERENCES = "nicotimer";
@@ -17,6 +19,16 @@ class Factory
     static Factory getInstance(Context context)
     {
         return new Factory(context);
+    }
+
+    static Long getStartOfDay()
+    {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR, 7);
+        calendar.set(Calendar.MINUTE, 30);
+        calendar.set(Calendar.SECOND, 0);
+
+        return calendar.getTimeInMillis();
     }
 
     State getState()

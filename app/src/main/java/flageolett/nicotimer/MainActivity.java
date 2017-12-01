@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
         String accepted = String.format(Locale.getDefault(),"%d", state.getAccepted());
         getAcceptedEditText().setText(accepted);
 
-        getStartDateEditText().setText(state.getStartDate());
+        getStartDateEditText().setText(state.getStartDateString());
         getNextHitTextView().setText(state.getNextHit());
         getCurrentTargetTextView().setText(state.getCurrentTarget());
     }
