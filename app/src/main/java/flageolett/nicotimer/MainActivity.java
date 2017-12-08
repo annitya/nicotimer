@@ -7,6 +7,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import flageolett.nicotimer.Notification.NicoTimer;
+import flageolett.nicotimer.State.GuiStateWatcher;
+import flageolett.nicotimer.State.State;
+
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements OnSharedPreferenceChangeListener
@@ -28,22 +32,22 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
         return (TextView) findViewById(R.id.textView_currentTarget_text);
     }
 
-    EditText getTargetEditText()
+    public EditText getTargetEditText()
     {
         return (EditText)findViewById(R.id.editText_target);
     }
 
-    EditText getUnitEditText()
+    public EditText getUnitEditText()
     {
         return (EditText)findViewById(R.id.editText_unit);
     }
 
-    EditText getAcceptedEditText()
+    public EditText getAcceptedEditText()
     {
         return (EditText)findViewById(R.id.editText_accepted);
     }
 
-    EditText getStartDateEditText()
+    public EditText getStartDateEditText()
     {
         return (EditText)findViewById(R.id.editText_startDate);
     }
@@ -59,16 +63,16 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 
         // Reflect state-changes in GUI.
         Factory
-            .getInstance(this)
-            .getState()
+            .getInstance()
+            .getState(this)
             .addChangeListener(this);
 
         // Load state.
         onSharedPreferenceChanged(null, null);
 
         timer = Factory
-            .getInstance(this)
-            .getNicoTimer();
+            .getInstance()
+            .getNicoTimer(this);
 
         updateStatus();
     }
@@ -96,8 +100,8 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key)
     {
         State state = Factory
-            .getInstance(this)
-            .getState();
+            .getInstance()
+            .getState(this);
 
         String target = String.format(Locale.getDefault(),"%d", state.getTarget());
         getTargetEditText().setText(target);

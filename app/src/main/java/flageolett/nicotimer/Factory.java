@@ -2,26 +2,33 @@ package flageolett.nicotimer;
 
 import android.app.AlarmManager;
 import android.content.Context;
+import flageolett.nicotimer.Notification.NicoTimer;
+import flageolett.nicotimer.State.State;
 
 import java.util.Calendar;
 
-class Factory
+public class Factory
 {
     private static final String PREFERENCES = "nicotimer";
+    private static Factory instance;
 
-    private Context context;
+    Factory() {}
 
-    private Factory(Context context)
+    public static Factory getInstance()
     {
-        this.context = context;
+        if (instance == null) {
+            instance = new Factory();
+        }
+
+        return instance;
     }
 
-    static Factory getInstance(Context context)
+    static void setInstance(Factory instance)
     {
-        return new Factory(context);
+        Factory.instance = instance;
     }
 
-    static Long getStartOfDay()
+    public static Long getStartOfDay()
     {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR, 7);
@@ -31,14 +38,19 @@ class Factory
         return calendar.getTimeInMillis();
     }
 
-    State getState()
+    public Double getLengthOfDay()
+    {
+        return 16d * 60 * 60 * 1000;
+    }
+
+    public State getState(Context context)
     {
         return new State(context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE));
     }
 
-    NicoTimer getNicoTimer()
+    public NicoTimer getNicoTimer(Context context)
     {
         AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-        return new NicoTimer(getState(), alarmManager, context);
+        return new NicoTimer(getState(context), alarmManager, context);
     }
 }

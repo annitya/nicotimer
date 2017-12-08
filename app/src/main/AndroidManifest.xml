@@ -12,8 +12,8 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".NicoNotification" />
-        <receiver android:name=".IntentReceiver" />
+        <receiver android:name=".Notification.NicoNotification" />
+        <receiver android:name=".Notification.IntentReceiver" />
     </application>
 
 </manifest>

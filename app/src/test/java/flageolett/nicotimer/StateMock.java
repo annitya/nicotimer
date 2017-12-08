@@ -1,5 +1,7 @@
 package flageolett.nicotimer;
 
+import flageolett.nicotimer.State.State;
+
 class StateMock extends State
 {
     private final Integer target;
@@ -14,25 +16,26 @@ class StateMock extends State
     }
 
     @Override
-    Integer getTarget()
+    public Integer getTarget()
     {
         return target;
     }
 
     @Override
-    String getCurrentTarget()
+    public String getCurrentTarget()
     {
         return target.toString();
     }
 
     @Override
-    Integer getAccepted()
+    public Integer getAccepted()
     {
         return accepted;
     }
 
-    void acceptOne()
+    @Override
+    public void setAccepted(Integer accepted)
     {
-        this.accepted++;
+        this.accepted = accepted;
     }
 }

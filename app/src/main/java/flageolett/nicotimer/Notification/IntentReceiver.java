@@ -1,9 +1,12 @@
-package flageolett.nicotimer;
+package flageolett.nicotimer.Notification;
 
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import flageolett.nicotimer.Factory;
+import flageolett.nicotimer.State.State;
+
 import java.util.Date;
 
 public class IntentReceiver extends BroadcastReceiver
@@ -13,8 +16,8 @@ public class IntentReceiver extends BroadcastReceiver
     {
         Boolean accepted = intent.getBooleanExtra("accepted", false);
         State state = Factory
-            .getInstance(context)
-            .getState();
+            .getInstance()
+            .getState(context);
 
         Integer unit = accepted ? state.getUnit() : 0;
         Integer currentAccepted = state.getAccepted();
@@ -26,7 +29,7 @@ public class IntentReceiver extends BroadcastReceiver
         scheduleNextNotification(context);
     }
 
-    private void cancelNotification(Context context)
+    static void cancelNotification(Context context)
     {
         NotificationManager manager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
         manager.cancel("NicoTimer", 1);
@@ -38,8 +41,8 @@ public class IntentReceiver extends BroadcastReceiver
     private void scheduleNextNotification(Context context)
     {
         NicoTimer timer = Factory
-            .getInstance(context)
-            .getNicoTimer();
+            .getInstance()
+            .getNicoTimer(context);
 
         Long nextDelay = timer.getNextDelay(new Date().getTime());
         timer.scheduleNextPush(nextDelay);

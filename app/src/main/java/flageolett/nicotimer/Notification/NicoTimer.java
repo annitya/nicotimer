@@ -1,39 +1,42 @@
-package flageolett.nicotimer;
+package flageolett.nicotimer.Notification;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import flageolett.nicotimer.Factory;
+import flageolett.nicotimer.State.State;
+
 import java.util.*;
 
-class NicoTimer
+public class NicoTimer
 {
     private PendingIntent currentIntent;
     private State state;
     private AlarmManager alarmManager;
     private Context context;
 
-    NicoTimer(State state, AlarmManager alarmManager, Context context)
+    public NicoTimer(State state, AlarmManager alarmManager, Context context)
     {
         this.state = state;
         this.alarmManager = alarmManager;
         this.context = context;
     }
 
-    void start()
+    public void start()
     {
         scheduleNextPush(0L);
     }
 
-    void stop()
+    public void stop()
     {
         if (currentIntent != null)
         {
             alarmManager.cancel(currentIntent);
+            IntentReceiver.cancelNotification(context);
+
             currentIntent = null;
+            return;
         }
 
         Date now = new Date();
@@ -48,7 +51,7 @@ class NicoTimer
         state.setAccepted(0);
     }
 
-    Boolean isRunning()
+    public Boolean isRunning()
     {
         return currentIntent != null;
     }
@@ -56,18 +59,29 @@ class NicoTimer
     void scheduleNextPush(Long delay)
     {
         Intent notificationIntent = new Intent(context, NicoNotification.class);
-        currentIntent = PendingIntent.getBroadcast(context, 100, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        currentIntent = PendingIntent.getBroadcast(context, 2, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Long nextPushTime = new Date().getTime() + delay;
-        alarmManager.set(AlarmManager.RTC_WAKEUP, nextPushTime, currentIntent);
+
+        // Delay will be zero on initial start. Send notification immediately.
+        if (delay == 0)
+        {
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, nextPushTime, currentIntent);
+        }
+        else {
+            alarmManager.set(AlarmManager.RTC_WAKEUP, nextPushTime, currentIntent);
+        }
 
         state.setNextHit(nextPushTime);
     }
 
-    Long getNextDelay(Long now)
+    public Long getNextDelay(Long now)
     {
         Long passedTime = now - Factory.getStartOfDay();
-        Double lengthOfDay = 16.5 * 60 * 60 * 1000;
+        Double lengthOfDay = Factory
+            .getInstance()
+            .getLengthOfDay();
+
         Double remainingTime = lengthOfDay - passedTime;
 
         Integer currentTarget = Integer.parseInt(state.getCurrentTarget());

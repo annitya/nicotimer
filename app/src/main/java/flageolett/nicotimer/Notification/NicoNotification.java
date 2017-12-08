@@ -1,4 +1,4 @@
-package flageolett.nicotimer;
+package flageolett.nicotimer.Notification;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.support.v4.app.NotificationCompat;
+import flageolett.nicotimer.R;
 
 public class NicoNotification extends BroadcastReceiver
 {

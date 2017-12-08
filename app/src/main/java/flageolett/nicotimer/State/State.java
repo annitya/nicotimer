@@ -1,4 +1,4 @@
-package flageolett.nicotimer;
+package flageolett.nicotimer.State;
 
 import android.content.SharedPreferences;
 
@@ -8,16 +8,16 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-class State
+public class State
 {
     private SharedPreferences preferences;
 
-    State(SharedPreferences preferences)
+    public State(SharedPreferences preferences)
     {
         this.preferences = preferences;
     }
 
-    void addChangeListener(SharedPreferences.OnSharedPreferenceChangeListener listener)
+    public void addChangeListener(SharedPreferences.OnSharedPreferenceChangeListener listener)
     {
         preferences.registerOnSharedPreferenceChangeListener(listener);
     }
@@ -27,7 +27,7 @@ class State
         preferences.unregisterOnSharedPreferenceChangeListener(listener);
     }
 
-    Integer getTarget()
+    public Integer getTarget()
     {
         return getInteger("target", 1);
     }
@@ -42,17 +42,17 @@ class State
         setTarget(charSequenceToInteger(target, 1));
     }
 
-    String getCurrentTarget()
+    public String getCurrentTarget()
     {
         return getString("currentTarget", getTarget().toString());
     }
 
-    void setCurrentTarget(String currentTarget)
+    public void setCurrentTarget(String currentTarget)
     {
         setString("currentTarget", currentTarget);
     }
 
-    Integer getUnit()
+    public Integer getUnit()
     {
         return getInteger("unit", 1);
     }
@@ -67,12 +67,12 @@ class State
         setUnit(charSequenceToInteger(unit, 1));
     }
 
-    Integer getAccepted()
+    public Integer getAccepted()
     {
         return getInteger("accepted", 0);
     }
 
-    void setAccepted(Integer accepted)
+    public void setAccepted(Integer accepted)
     {
         setInteger("accepted", accepted);
     }
@@ -82,12 +82,12 @@ class State
         setAccepted(charSequenceToInteger(accepted, 0));
     }
 
-    String getStartDateString()
+    public String getStartDateString()
     {
         return getString("startDate", "");
     }
 
-    Long getStartDate()
+    public Long getStartDate()
     {
         String startDateText = getStartDateString();
         DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
@@ -110,7 +110,7 @@ class State
         setString("startDate", startDate);
     }
 
-    String getNextHit()
+    public String getNextHit()
     {
         Long nextHit = preferences.getLong("nextHit", 0);
 
@@ -125,7 +125,7 @@ class State
         return dateFormat.format(nextHitDate);
     }
 
-    void setNextHit(Long nextHit)
+    public void setNextHit(Long nextHit)
     {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putLong("nextHit", nextHit);

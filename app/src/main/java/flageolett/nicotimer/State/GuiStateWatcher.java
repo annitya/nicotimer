@@ -1,15 +1,17 @@
-package flageolett.nicotimer;
+package flageolett.nicotimer.State;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import flageolett.nicotimer.Factory;
+import flageolett.nicotimer.MainActivity;
 
-class GuiStateWatcher
+public class GuiStateWatcher
 {
-    static void registerChangedListeners(MainActivity activity)
+    public static void registerChangedListeners(MainActivity activity)
     {
         State state = Factory
-            .getInstance(activity)
-            .getState();
+            .getInstance()
+            .getState(activity);
 
         abstract class Watcher implements TextWatcher
         {

@@ -15,10 +15,10 @@ A too high number is better than one too low. Remember; we want do this without 
 5. Click "Start" when you have your first nicotine-unit of the day.
 
 6. Your units will then be distributed evenly throughout the day.
-You will get a push-notification when it's time. If you don't want nicotime when the push-message appears, 
+You will get a push-notification when it's time. If you don't want nicotine when the push-message appears, 
 expand the notification and click "reject". Swiping the notification away or clicking it implies you ingested a unit. 
 If you reject a notification, the time between notifications will become slightly lower.
-Less nicotine during a day is allowed, more should be avoided. Duh!
+Less nicotine during a day is allowed, more is not. Duh!
 
 7. The app assumes that you sleep 7,5 hours each night. An average interval will be used should you stay up later.
 
